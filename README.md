@@ -1,0 +1,2 @@
+# SmalltalkSeasideHelloWorld
+Smalltalk Seaside HelloWorld

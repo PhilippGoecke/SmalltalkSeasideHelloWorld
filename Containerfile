@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt upgrade -y \
     && apt install -y --no-install-recommends --no-install-suggests curl unzip \
-    && apt install -y --no-install-recommends --no-install-suggests build-essential \
+    && apt install -y --no-install-recommends --no-install-suggests build-essential ca-certificates \
     && rm -rf "/var/lib/apt/lists/*" \
     && rm -rf /var/cache/apt/archives
 
@@ -27,7 +27,7 @@ RUN ./pharo Pharo.image eval --save "Metacello new \
         callback: [:request | \
             WAResponse new \
                 contentType: 'text/html'; \
-                nextPutAll: '<html><body><h1>Hello World from Seaside!</h1></body></html>'; \
+                nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>'; \
                 yourself]) \
         at: 'hello'. \
     ZnZincServerAdaptor startOn: 8080."

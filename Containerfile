@@ -18,7 +18,7 @@ USER $USER
 RUN curl -L https://get.pharo.org/64/stable+vm | bash
 
 # Create a Seaside hello world application
-RUN ./pharo Pharo.image eval --save "Metacello new \
+RUN $HOME/pharo Pharo.image eval --save "Metacello new \
     baseline: 'Seaside3'; \
     repository: 'github://SeasideSt/Seaside:master/repository'; \
     load. \
@@ -27,11 +27,10 @@ RUN ./pharo Pharo.image eval --save "Metacello new \
         callback: [:request | \
             WAResponse new \
                 contentType: 'text/html'; \
-                nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>'; \
-                yourself]) \
+                nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>']) \
         at: 'hello'. \
     ZnZincServerAdaptor startOn: 8080."
 
 EXPOSE 8080
 
-CMD ["./pharo", "Pharo.image", "eval", "ZnZincServerAdaptor startOn: 8080. Smalltalk snapshot: false andQuit: false"]
+CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "ZnZincServerAdaptor startOn: 8080. Smalltalk snapshot: false andQuit: false"]

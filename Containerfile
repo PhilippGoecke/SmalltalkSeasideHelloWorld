@@ -24,15 +24,16 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
     load."
 
 RUN $HOME/pharo Pharo.image eval --save "WAAdmin unregister: 'hello'. \
-    WAAdmin register: (WACallbackRegistry new \
-        handler: [ :request | \
-            WAResponse new \
-                contentType: 'text/html'; \
-                nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>'; \
-                yourself ]) \
+    WAAdmin register: [ :request | \
+        WAResponse new \
+            contentType: 'text/html'; \
+            nextPutAll: '<html><body><h1>Hello World from Seaside!</h1></body></html>'; \
+            yourself ] \
         at: 'hello'. \
     ZnZincServerAdaptor startOn: 8080."
 
 EXPOSE 8080
+
+HEALTHCHECK --interval=35s --timeout=4s CMD curl --fail --insecure https://localhost:8080/ || exit 1
 
 CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "ZnZincServerAdaptor startOn: 8080. Smalltalk snapshot: false andQuit: false"]

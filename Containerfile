@@ -23,14 +23,17 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
     repository: 'github://SeasideSt/Seaside:master/repository'; \
     load."
 
-RUN $HOME/pharo Pharo.image eval --save "WAAdmin unregister: 'hello'. \
-    WAAdmin register: [ :request | \
-        WAResponse new \
-            contentType: 'text/html'; \
-            nextPutAll: '<html><body><h1>Hello World from Seaside!</h1></body></html>'; \
-            yourself ] \
-        at: 'hello'. \
-    ZnZincServerAdaptor startOn: 8080."
+RUN $HOME/pharo Pharo.image eval --save "WAAdmin register: (WACallbackProcessHandler new) at: 'hello'. \
+        WAAdmin defaultDispatcher register: ((WARequestHandler new) yourself) at: 'hello'. \
+        WAAdmin defaultDispatcher \
+            register: (WAComponent subclass: #HelloWorld \
+                instanceVariableNames: '' \
+                classVariableNames: '' \
+                package: 'HelloWorld') \
+            asApplicationAt: 'hello'. \
+        HelloWorld compile: 'renderContentOn: html html heading: ''Hello World from Seaside!'''. \
+        (WAAdmin defaultDispatcher handlerAt: 'hello') preferenceAt: #sessionClass put: WASession. \
+        WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance."
 
 EXPOSE 8080
 

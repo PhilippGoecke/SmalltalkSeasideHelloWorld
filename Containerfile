@@ -24,11 +24,12 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
     load."
 
 RUN $HOME/pharo Pharo.image eval --save "WAAdmin unregister: 'hello'. \
-    WAAdmin register: [ :request | \
-        WAResponse new \
-            contentType: 'text/html'; \
-            nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>'; \
-            yourself ] \
+    WAAdmin register: (WACallbackRegistry new \
+        handler: [ :request | \
+            WAResponse new \
+                contentType: 'text/html'; \
+                nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>'; \
+                yourself ]) \
         at: 'hello'. \
     ZnZincServerAdaptor startOn: 8080."
 

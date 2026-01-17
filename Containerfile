@@ -21,13 +21,14 @@ RUN curl -L https://get.pharo.org/64/stable+vm | bash
 RUN $HOME/pharo Pharo.image eval --save "Metacello new \
     baseline: 'Seaside3'; \
     repository: 'github://SeasideSt/Seaside:master/repository'; \
-    load. \
-    WAAdmin unregister: 'hello'. \
-    WAAdmin register: (WARequestHandler new \
-        callback: [:request | \
-            WAResponse new \
-                contentType: 'text/html'; \
-                nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>']) \
+    load."
+
+RUN $HOME/pharo Pharo.image eval --save "WAAdmin unregister: 'hello'. \
+    WAAdmin register: [ :request | \
+        WAResponse new \
+            contentType: 'text/html'; \
+            nextPutAll: '<html><body><h1>Hello ', (request at: 'name' ifAbsent: ['World']), ' from Seaside!</h1></body></html>'; \
+            yourself ] \
         at: 'hello'. \
     ZnZincServerAdaptor startOn: 8080."
 

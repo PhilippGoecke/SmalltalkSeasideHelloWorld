@@ -39,4 +39,6 @@ EXPOSE 8080
 
 HEALTHCHECK --interval=35s --timeout=4s CMD curl --fail --insecure https://localhost:8080/ || exit 1
 
-CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "ZnZincServerAdaptor startOn: 8080. Smalltalk snapshot: false andQuit: false"]
+#CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "ZnZincServerAdaptor startOn: 8080. Smalltalk snapshot: false andQuit: false"]
+CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "--no-quit", "WAServerManager default adaptor port: 8080; start"]
+

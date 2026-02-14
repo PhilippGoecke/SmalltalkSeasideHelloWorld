@@ -24,16 +24,17 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
     load."
 
 RUN $HOME/pharo Pharo.image eval --save "WAAdmin register: (WACallbackProcessHandler new) at: 'hello'. \
-        WAAdmin defaultDispatcher register: ((WARequestHandler new) yourself) at: 'hello'. \
-        WAAdmin defaultDispatcher \
-            register: (WAComponent subclass: #HelloWorld \
-                instanceVariableNames: '' \
-                classVariableNames: '' \
-                package: 'HelloWorld') \
-            asApplicationAt: 'hello'. \
-        HelloWorld compile: 'renderContentOn: html html heading: ''Hello World from Seaside!'''. \
-        (WAAdmin defaultDispatcher handlerAt: 'hello') preferenceAt: #sessionClass put: WASession. \
-        WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance."
+    WAAdmin defaultDispatcher register: ((WARequestHandler new) yourself) at: 'hello'. \
+    WAAdmin defaultDispatcher \
+        register: (WAComponent subclass: #HelloWorld \
+            instanceVariableNames: '' \
+            classVariableNames: '' \
+            package: 'HelloWorld') \
+        asApplicationAt: 'hello'. \
+    HelloWorld compile: 'renderContentOn: html html heading: ''Hello World from Seaside!'''. \
+    (WAAdmin defaultDispatcher handlerAt: 'hello') preferenceAt: #sessionClass put: WASession. \
+    WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance." \
+    || (cat PharoDebug.log && exit 1)
 
 EXPOSE 8080
 

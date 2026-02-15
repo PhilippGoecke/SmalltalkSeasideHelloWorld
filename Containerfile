@@ -23,12 +23,6 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
   repository: 'github://SeasideSt/Seaside:master/repository'; \
   load."
 
-RUN $HOME/pharo Pharo.image eval --save "WAAdmin register: (WACallbackProcessHandler new) at: 'hello'." \
-  || (cat PharoDebug.log && exit 1)
-
-RUN $HOME/pharo Pharo.image eval --save "WAAdmin defaultDispatcher register: ((WARequestHandler new) yourself) at: 'hello'." \
-  || (cat PharoDebug.log && exit 1)
-
 RUN $HOME/pharo Pharo.image eval --save "WAAdmin defaultDispatcher \
   register: (WAComponent subclass: #HelloWorld \
   instanceVariableNames: '' \
@@ -51,3 +45,4 @@ EXPOSE 8080
 HEALTHCHECK --interval=35s --timeout=4s CMD curl --fail --insecure https://localhost:8080/ || exit 1
 
 CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "--no-quit", "ZnZincServerAdaptor startOn: 8080"]
+

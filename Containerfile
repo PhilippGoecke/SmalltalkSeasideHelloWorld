@@ -23,7 +23,7 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
   repository: 'github://SeasideSt/Seaside:master/repository'; \
   load."
 
-RUN $HOME/pharo Pharo.image eval --save "WAComponent subclass: #HelloWorld instanceVariableNames: '' classVariableNames: '' package: 'HelloWorld'" \
+RUN $HOME/pharo Pharo.image eval --save "WAComponent subclass: #HelloWorld slots: {} classVariables: {} package: 'HelloWorld'" \
   || (cat PharoDebug.log && exit 1)
 
 RUN $HOME/pharo Pharo.image eval --save "(Smalltalk at: #HelloWorld) compile: 'renderContentOn: html html heading: ''Hello World from Seaside!'''" \

@@ -31,7 +31,7 @@ RUN $HOME/pharo Pharo.image eval --save "WAAdmin defaultDispatcher \
   asApplicationAt: 'hello'." \
   || (cat PharoDebug.log && exit 1)
 
-RUN $HOME/pharo Pharo.image eval --save "HelloWorld compile: 'renderContentOn: html html heading: ''Hello World from Seaside!'''." \
+RUN $HOME/pharo Pharo.image eval --save "HelloWorld compile: 'renderContentOn: html html heading: \"Hello World from Seaside!\"'." \
   || (cat PharoDebug.log && exit 1)
 
 RUN $HOME/pharo Pharo.image eval --save "(WAAdmin defaultDispatcher handlerAt: 'hello') preferenceAt: #sessionClass put: WASession." \
@@ -45,4 +45,3 @@ EXPOSE 8080
 HEALTHCHECK --interval=35s --timeout=4s CMD curl --fail --insecure https://localhost:8080/ || exit 1
 
 CMD ["/home/smalltalk/pharo", "Pharo.image", "eval", "--no-quit", "ZnZincServerAdaptor startOn: 8080"]
-

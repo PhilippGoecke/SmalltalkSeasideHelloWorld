@@ -23,21 +23,19 @@ RUN $HOME/pharo Pharo.image eval --save "Metacello new \
   repository: 'github://SeasideSt/Seaside:master/repository'; \
   load."
 
-RUN $HOME/pharo Pharo.image eval --save "WAAdmin defaultDispatcher \
-  register: (WAComponent subclass: #HelloWorld \
-  instanceVariableNames: '' \
-  classVariableNames: '' \
-  package: 'HelloWorld') \
-  asApplicationAt: 'hello'." \
+RUN $HOME/pharo Pharo.image eval --save "WAComponent subclass: #HelloWorld instanceVariableNames: '' classVariableNames: '' package: 'HelloWorld'" \
   || (cat PharoDebug.log && exit 1)
 
-RUN $HOME/pharo Pharo.image eval --save "HelloWorld compile: 'renderContentOn: html html heading: \"Hello World from Seaside!\"'." \
+RUN $HOME/pharo Pharo.image eval --save "(Smalltalk at: #HelloWorld) compile: 'renderContentOn: html html heading: ''Hello World from Seaside!'''" \
   || (cat PharoDebug.log && exit 1)
 
-RUN $HOME/pharo Pharo.image eval --save "(WAAdmin defaultDispatcher handlerAt: 'hello') preferenceAt: #sessionClass put: WASession." \
+RUN $HOME/pharo Pharo.image eval --save "WAAdmin register: (Smalltalk at: #HelloWorld) asApplicationAt: 'hello'" \
   || (cat PharoDebug.log && exit 1)
 
-RUN $HOME/pharo Pharo.image eval --save "WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance." \
+RUN $HOME/pharo Pharo.image eval --save "(WAAdmin defaultDispatcher handlerAt: 'hello') preferenceAt: #sessionClass put: WASession" \
+  || (cat PharoDebug.log && exit 1)
+
+RUN $HOME/pharo Pharo.image eval --save "WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance" \
   || (cat PharoDebug.log && exit 1)
 
 EXPOSE 8080
